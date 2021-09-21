@@ -128,9 +128,7 @@ A client...
   "meta": {
     "revisions:resources": ["articles", "people", "photos"]
   },
-  "data": {
-    // ...
-  }
+  "data": {}
 }
 ```
 
