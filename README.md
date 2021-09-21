@@ -1,17 +1,43 @@
 # JSON:API Revisions
 
-Revisions is an extension to the JSON:API v1.1 specification, inspired by
-Google's [Resource Revisions AIP][aip/162].
+The Revisions extension is an _opinionated_ extension to the JSON:API v1.1
+specification, influenced by Google's
+["Resource Revisions" API Improvement Proposal][aip/162].
 
-### Meta
+## Design Rationale
 
-#### Glossary
+Historical information about a Resource is often meaningful within the
+application context; there are solutions to capturing this information with
+varying degrees of strictness, from [Event Sourcing][event-sourcing] to activity
+logs. Revisioning individual Resources is a helpful middle ground that provides
+more flexibility than an activity log with lower costs than Event Sourcing.
+
+The specification described here is an opinionated implementation
+of revisioning; it may not suit all use-cases. A set of principles shaped the
+design of this specification:
+
+- Every Resource of a type within an application must have the same revisioning
+  standards applied, but not every Resource type requires revisioning
+- A representation of a revision of a Resource must remain consistent for
+  the entire life of the Resource, regardless of API evolution
+- An application may choose to allow Revisions to change before they become a
+  part of the historical record to allow a user to _stage_ and then _commit_
+  changes
+
+[Questions][discussions], [suggestions][discussions], and [corrections][pulls]
+to the specification are gladly received if they align with these principles.
+Some of these principles may be burdensome for your use-case; please fork the
+specification if neccessary.
+
+## Meta
+
+### Glossary
 
 | Term     | Description                                                         |
 | -------- | ------------------------------------------------------------------- |
 | Revision | A complete representation of a Resource (attributes, relationships) |
 
-#### URI
+### URI
 
 The canonical URL of this extension's Specification is
 `https://github.com/scenarios-com/json-api-ext-revisions`
@@ -24,19 +50,17 @@ Content-Type: application/vnd.api+json;
   ext="https://github.com/scenarios-com/json-api-ext-revisions"
 ```
 
-#### Namespace
+### Namespace
 
 The namespace for this extension's members and query parameters is `revisions`.
 
 ## Requirements
 
-The following list is a draft set of requirements for Revisioning.
-
 A Revision...
 
 - ...may be immutable
 - ...must revise an earlier Revision, except the first Revision
-- ...should be identified using a 8 character string of hexadecimal digits
+- ...should be identified using an 8 character string of hexadecimal digits
 
 A Revisioned Resource...
 
@@ -63,6 +87,9 @@ A server...
 - ...must treat Revisions as a supplement; a client must be able to interact
   with the server without knowledge of Revisions
 - ...must include revision information in relation links
+- ...must represent a Revision of a Resource the same, forever, regardless of
+  how the api changes -- it _may_ allow a client to explicitly opt-out of this
+  behaviour
 
 A client...
 
@@ -91,10 +118,7 @@ A client...
 }
 ```
 
-### TODO
-
-- [ ] Represent the mutability of a Revision in `revisions:revision`
-- [ ] Define language to communicate the difference between a revision that has
-      never been used and a revision that has been canonical at some point
-
 [aip/162]: https://google.aip.dev/162
+[event-sourcing]: https://martinfowler.com/eaaDev/EventSourcing.html
+[discussions]: /discussions
+[pulls]: /pulls
