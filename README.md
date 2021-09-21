@@ -1,8 +1,12 @@
-# JSON:API Revisions
+# JSON:API Revisions ![draft]
 
 The Revisions extension is an _opinionated_ extension to the JSON:API v1.1
 specification, influenced by Google's
 ["Resource Revisions" API Improvement Proposal][aip/162].
+
+:construction_worker: As an early draft, radical change is possible  
+:crystal_ball: Please use milestones [v0] and [v1] to track progress towards
+stability
 
 ## Design Rationale
 
@@ -136,3 +140,6 @@ A client...
 [event-sourcing]: https://martinfowler.com/eaaDev/EventSourcing.html
 [discussions]: /discussions
 [pulls]: /pulls
+[draft]: https://img.shields.io/badge/specification-draft-orange
+[v0]: /milestone/1
+[v1]: /milestone/2
