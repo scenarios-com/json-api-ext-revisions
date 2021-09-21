@@ -5,6 +5,7 @@ specification, influenced by Google's
 ["Resource Revisions" API Improvement Proposal][aip/162].
 
 :construction_worker: As an early draft, radical change is possible
+
 :traffic_light: Please use milestones [v0] and [v1] to track progress towards
 stability
 
