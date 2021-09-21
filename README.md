@@ -90,30 +90,46 @@ A server...
 - ...must represent a Revision of a Resource the same, forever, regardless of
   how the api changes -- it _may_ allow a client to explicitly opt-out of this
   behaviour
+- ...should include a list of all Revisioned Resource types in the top-level meta
+- ...may include a list of the subset of Revisioned Resource types that appear
+  in the document
 
 A client...
 
 - ...must request the revision of a Resource as described in
   `Resource Identifier Object`
+- ...should rely on the top-level meta to identify which resources are Revisioned
+- ...may use the presence of namespaced attributes to identify which
+  Resources are Revisioned
 
 ### Example Resource Structure
 
-```
+```json
 {
   "type": "example",
   "id": "69fcb727-f791-4604-aa9f-1a079cd9a0d7",
   "revisions:id": "5a3960d1",
   "revisions:canonical": "953245a9",
-  "revisions:history": [
-    {"id": "953245a9"},
-    {"id": "5a3960d1"},
-  ],
+  "revisions:history": [{ "id": "953245a9" }, { "id": "5a3960d1" }],
   "revisions:revision": {
     "id": "5a3960d1",
     "summary": "Created example",
     "revises": null,
     "createdAt": "2020-01-01T00:00:00Z",
-    "updatedAt": "2020-01-01T00:00:00Z",
+    "updatedAt": "2020-01-01T00:00:00Z"
+  }
+}
+```
+
+### Example Revisions Top-Level Meta
+
+```json
+{
+  "meta": {
+    "revisions:resources": ["articles", "people", "photos"]
+  },
+  "data": {
+    // ...
   }
 }
 ```
