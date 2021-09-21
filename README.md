@@ -4,9 +4,8 @@ The Revisions extension is an _opinionated_ extension to the JSON:API v1.1
 specification, influenced by Google's
 ["Resource Revisions" API Improvement Proposal][aip/162].
 
-:construction_worker: As an early draft, radical change is possible
-
-:traffic_light: Please use milestones [v0] and [v1] to track progress towards
+:construction_worker: As an early draft, radical change is possible  
+:crystal_ball: Please use milestones [v0] and [v1] to track progress towards
 stability
 
 ## Design Rationale
