@@ -138,8 +138,8 @@ A client...
 
 [aip/162]: https://google.aip.dev/162
 [event-sourcing]: https://martinfowler.com/eaaDev/EventSourcing.html
-[discussions]: /discussions
-[pulls]: /pulls
+[discussions]: https://github.com/scenarios-com/json-api-ext-revisions/discussions
+[pulls]: https://github.com/scenarios-com/json-api-ext-revisions/pulls
 [draft]: https://img.shields.io/badge/specification-draft-orange
-[v0]: /milestone/1
-[v1]: /milestone/2
+[v0]: https://github.com/scenarios-com/json-api-ext-revisions/milestone/1
+[v1]: https://github.com/scenarios-com/json-api-ext-revisions/milestone/2
