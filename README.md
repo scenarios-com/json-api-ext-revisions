@@ -58,6 +58,49 @@ Content-Type: application/vnd.api+json;
 
 The namespace for this extension's members and query parameters is `revisions`.
 
+## Client Use Cases
+
+The specification must support a sane and pleasant path to implementing each of
+these use cases for clients.
+
+- [ ] Show the latest representation of a Resource
+- [ ] List a complete history of a Resource
+- [ ] Update the Resource to a previous representation (new Revision with old
+      state)
+- [ ] Persist changes without automatically making them canonical
+- [ ] Accept Revisions as "suggestions" that may or may not become part of the
+      Resource's history
+- [ ] Expose an interface that _does not_ surface Revision information to end
+      users
+
+### Client Operations
+
+To enable these use cases, the specification must support the following
+operations performed by a client.
+
+#### Standard Operations
+
+All operations described in
+[Creating, Updating and Deleting Resources][jsonapi/crud] must be possible
+_without_ a client having any knowledge of the extension.
+
+- [ ] List Resources of type
+- [ ] View a Resource
+- [ ] Create a Resource
+- [ ] Update a Resource
+- [ ] Update a Resource's Relationships
+- [ ] Delete a Resource
+
+#### Revision Operations
+
+- [ ] View a specific Revision of a Resource
+- [ ] Create a new Resource _with_ genesis Revision information
+- [ ] Update a specific _mutable_ Revision of a Resource
+- [ ] Make a _mutable_ Revision the canonical Revision
+- [ ] Create a new Revision of a Resource that explicitly revises another
+- [ ] Create a new Revision of a Resource _without_ explicitly revising another
+- [ ] Delete a _mutable_ Revision of a Resource
+
 ## Requirements
 
 A Revision...
@@ -139,49 +182,6 @@ A client...
   "data": {}
 }
 ```
-
-## Client Use Cases
-
-The specification must support a sane and pleasant path to implementing each of
-these use cases for clients.
-
-- [ ] Show the latest representation of a Resource
-- [ ] List a complete history of a Resource
-- [ ] Update the Resource to a previous representation (new Revision with old
-      state)
-- [ ] Persist changes without automatically making them canonical
-- [ ] Accept Revisions as "suggestions" that may or may not become part of the
-      Resource's history
-- [ ] Expose an interface that _does not_ surface Revision information to end
-      users
-
-### Client Operations
-
-To enable these use cases, the specification must support the following
-operations performed by a client.
-
-#### Standard Operations
-
-All operations described in
-[Creating, Updating and Deleting Resources][jsonapi/crud] must be possible
-_without_ a client having any knowledge of the extension.
-
-- [ ] List Resources of type
-- [ ] View a Resource
-- [ ] Create a Resource
-- [ ] Update a Resource
-- [ ] Update a Resource's Relationships
-- [ ] Delete a Resource
-
-#### Revision Operations
-
-- [ ] View a specific Revision of a Resource
-- [ ] Create a new Resource _with_ genesis Revision information
-- [ ] Update a specific _mutable_ Revision of a Resource
-- [ ] Make a _mutable_ Revision the canonical Revision
-- [ ] Create a new Revision of a Resource that explicitly revises another
-- [ ] Create a new Revision of a Resource _without_ explicitly revising another
-- [ ] Delete a _mutable_ Revision of a Resource
 
 [aip/162]: https://google.aip.dev/162
 [event-sourcing]: https://martinfowler.com/eaaDev/EventSourcing.html
