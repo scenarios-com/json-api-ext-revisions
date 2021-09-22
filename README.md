@@ -22,7 +22,7 @@ design of this specification:
 
 - Every Resource of a type within an application must have the same revisioning
   standards applied, but not every Resource type requires revisioning
-- A representation of a revision of a Resource must remain consistent for
+- A representation of a Revision of a Resource must remain consistent for
   the entire life of the Resource, regardless of API evolution
 - An application may choose to allow Revisions to change before they become a
   part of the historical record to allow a user to _stage_ and then _commit_
@@ -30,20 +30,28 @@ design of this specification:
 
 [Questions][discussions], [suggestions][discussions], and [corrections][pulls]
 to the specification are gladly received if they align with these principles.
-Some of these principles may be burdensome for your use-case; please fork the
-specification if neccessary.
+Some of these principles may be burdensome for your use case; please fork the
+specification if necessary.
 
 ## Meta
 
 ### Glossary
 
-| Term     | Description                                                         |
-| -------- | ------------------------------------------------------------------- |
-| Revision | A complete representation of a Resource (attributes, relationships) |
+Authors must use capitals for each defined term to provide clarity to readers.
+
+| Term       | Description                                                         |
+| ---------- | ------------------------------------------------------------------- |
+| Resource   | A uniquely identifiable instance of a type                          |
+| Revision   | A complete representation of a Resource (attributes, relationships) |
+| Locked     | Immutable, no change or delete is permitted                         |
+| Canonical  | The current representation of a Resource                            |
+| Collection | An array of zero or more Resources of a type                        |
+| Fetch      | Make a request and read the response                                |
+| JSON:API   | v1.1 of the JSON:API Specification                                  |
 
 ### URI
 
-The canonical URL of this extension's Specification is
+The URL of this extension's Specification is
 `https://github.com/scenarios-com/json-api-ext-revisions`
 
 ```http
@@ -63,20 +71,19 @@ The namespace for this extension's members and query parameters is `revisions`.
 The specification must support a sane and pleasant path to implementing each of
 these use cases for clients.
 
-- [ ] Show the latest representation of a Resource
-- [ ] List a complete history of a Resource
-- [ ] Update the Resource to a previous representation (new Revision with old
-      state)
-- [ ] Persist changes without automatically making them canonical
-- [ ] Accept Revisions as "suggestions" that may or may not become part of the
-      Resource's history
-- [ ] Expose an interface that _does not_ surface Revision information to end
-      users
+- [ ] Show the Canonical representation of a Resource without knowledge of its
+      Revisions
+- [ ] List a complete history of a Resource's Revisions
+- [ ] Revert a Resource to the state of a previous Revision
+- [ ] Persist changes without making them Canonical
+- [ ] Create Revisions as "suggestions" that an authorized user may accept or
+      reject
+- [ ] Expose a user interface that _does not_ surface Revision information
+      to end-users
 
 ### Client Operations
 
-To enable these use cases, the specification must support the following
-operations performed by a client.
+The following operations are required to support the use cases.
 
 #### Standard Operations
 
@@ -84,8 +91,8 @@ All operations described in
 [Creating, Updating and Deleting Resources][jsonapi/crud] must be possible
 _without_ a client having any knowledge of the extension.
 
-- [ ] List Resources of type
-- [ ] View a Resource
+- [ ] Fetch Collection
+- [ ] Fetch a Resource
 - [ ] Create a Resource
 - [ ] Update a Resource
 - [ ] Update a Resource's Relationships
@@ -93,19 +100,19 @@ _without_ a client having any knowledge of the extension.
 
 #### Revision Operations
 
-- [ ] View a specific Revision of a Resource
+- [ ] Fetch a specific Revision of a Resource
 - [ ] Create a new Resource _with_ genesis Revision information
-- [ ] Update a specific _mutable_ Revision of a Resource
-- [ ] Make a _mutable_ Revision the canonical Revision
+- [ ] Update a specific Unlocked Revision of a Resource
+- [ ] Promote an Unlocked Revision to the Canonical Revision
 - [ ] Create a new Revision of a Resource that explicitly revises another
 - [ ] Create a new Revision of a Resource _without_ explicitly revising another
-- [ ] Delete a _mutable_ Revision of a Resource
+- [ ] Delete an Unlocked Revision of a Resource
 
 ## Requirements
 
 A Revision...
 
-- ...may be immutable
+- ...may be Locked
 - ...must revise an earlier Revision, except the first ("genesis") Revision
 - ...should be identified using an 8 character string of hexadecimal digits
 
@@ -124,21 +131,20 @@ A server...
 - ...must include a Revision ID in a Revisioned Resource's
   `Resource Identifier Object`
 - ...must treat the absence of a Revision ID in a client request as a reference
-  to the canonical Revision
+  to the Canonical Revision
 - ...must not persist a reference to a Revisioned Resource without a Revision ID
-- ...may derive canonical state dynamically through multiple Revisions
+- ...may derive Canonical state dynamically through multiple Revisions
 - ...may store the complete state of each Revision
-- ...may allow the Revision that a Revision revises to change while the Revision
-  is mutable (to enable "apply suggestion to latest version")
-- ...should make Revisions immutable once a reference to it (implicit or
+- ...may accept changes to the Revision that is revised by another
+- ...should make Revisions Locked once a reference to it (implicit or
   explicit) exists
 - ...must uniquely identify a Resource using `type` + `id` + `revisions:id`
 - ...must treat Revisions as a supplement; a client must be able to interact
   with the server without knowledge of Revisions
-- ...must include revision information in relation links
+- ...must include Revision information in relation links
 - ...must represent a Revision of a Resource the same, forever, regardless of
   how the api changes -- it _may_ allow a client to explicitly opt-out of this
-  behaviour
+  behavior
 - ...should include a list of all Revisioned Resource types in the top-level meta
 - ...may include a list of the subset of Revisioned Resource types that appear
   in the document
@@ -147,10 +153,11 @@ A server...
 
 A client...
 
-- ...must request the revision of a Resource as described in
+- ...must Fetch the Revision of a Resource as described in its
   `Resource Identifier Object`
-- ...should rely on the top-level meta to identify which resources are Revisioned
-- ...may use the presence of namespaced attributes to identify which
+- ...should rely on the top-level meta to identify which Resources are
+  Revisioned
+- ...should not use the presence of namespaced attributes to identify which
   Resources are Revisioned
 
 ### Example Resource Structure
