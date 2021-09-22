@@ -63,14 +63,14 @@ The namespace for this extension's members and query parameters is `revisions`.
 A Revision...
 
 - ...may be immutable
-- ...must revise an earlier Revision, except the first Revision
+- ...must revise an earlier Revision, except the first ("genesis") Revision
 - ...should be identified using an 8 character string of hexadecimal digits
 
 A Revisioned Resource...
 
 - ...has a `canonical` Revision which represents the current / latest state of
   the Resource
-- ...must not have any state that independent of a Revision
+- ...must not have any state that exists independent of a Revision
 
 A server...
 
@@ -80,8 +80,8 @@ A server...
 - ...may accept partial Revision information
 - ...must include a Revision ID in a Revisioned Resource's
   `Resource Identifier Object`
-- ...must treat the absence of a Revision ID as a reference to the canonical
-  Revision
+- ...must treat the absence of a Revision ID in a client request as a reference
+  to the canonical Revision
 - ...must not persist a reference to a Revisioned Resource without a Revision ID
 - ...may derive canonical state dynamically through multiple Revisions
 - ...may store the complete state of each Revision
