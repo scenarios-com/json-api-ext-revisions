@@ -44,7 +44,8 @@ Authors must use capitals for each defined term to provide clarity to readers.
 | Resource   | A uniquely identifiable instance of a type                          |
 | Revision   | A complete representation of a Resource (attributes, relationships) |
 | Locked     | Immutable, no change or delete is permitted                         |
-| Canonical  | The current representation of a Resource                            |
+| Canonical  | The Canonical Revision is the current representation of a Resource  |
+| Stale      | A Stale Revision was previously Canonical but has been superseded   |
 | Collection | An array of zero or more Resources of a type                        |
 | Fetch      | Make a request and read the response                                |
 | JSON:API   | v1.1 of the JSON:API Specification                                  |
@@ -80,6 +81,9 @@ these use cases for clients.
       reject
 - [ ] Expose a user interface that _does not_ surface Revision information
       to end-users
+- [ ] Provide meta about a Revision in the application context, e.g: an
+      application may describe a Revision as adding `5` `Foo` relations to a
+      `Bar`
 
 ### Client Operations
 
@@ -150,6 +154,10 @@ A server...
   in the document
 - ...may allow a client to "preview" the state of a Resource if a Revision were
   applied to it
+- ...should implement the same include logic for Revisions information, e.g:
+  `?revisions:include=history,canonical` would include `revisions:history` and
+  `revisions:canonical` for each Revisioned Resource in the request
+- ...should not include `revisions:history` by default
 
 A client...
 
@@ -162,22 +170,56 @@ A client...
 
 ### Example Resource Structure
 
+An example of fetching a Stale Revision of a Resource, e.g:
+
+```http
+GET /examples/69fcb727-f791-4604-aa9f-1a079cd9a0d7?revisions:id=5a3960d1&revisions:include=history
+```
+
 ```json
 {
   "type": "example",
   "id": "69fcb727-f791-4604-aa9f-1a079cd9a0d7",
+  "attributes": {
+    "name": "Example"
+  },
   "revisions:id": "5a3960d1",
-  "revisions:canonical": "953245a9",
-  "revisions:history": [{ "id": "953245a9" }, { "id": "5a3960d1" }],
   "revisions:revision": {
     "id": "5a3960d1",
     "summary": "Created example",
     "revises": null,
     "createdAt": "2020-01-01T00:00:00Z",
-    "updatedAt": "2020-01-01T00:00:00Z"
-  }
+    "updatedAt": "2020-01-01T00:00:00Z",
+    "isCanonical": false
+  },
+  "revisions:history": [
+    {
+      "id": "953245a9",
+      "summary": "Added context to name",
+      "revises": "5a3960d1",
+      "createdAt": "2020-01-02T00:00:00Z",
+      "updatedAt": "2020-01-02T00:00:00Z",
+      "isCanonical": true
+    },
+    {
+      "id": "5a3960d1",
+      "summary": "Created example",
+      "revises": null,
+      "createdAt": "2020-01-01T00:00:00Z",
+      "updatedAt": "2020-01-01T00:00:00Z",
+      "isCanonical": false
+    }
+  ],
+  "revisions:meta": {}
 }
 ```
+
+- `revisions:id` is a duplication of `revisions:revision.id` _but_ it is part of
+  the `Resource Identifier Object` so it is required
+- The first Revision in the `revisions:history` list will always be the
+  Canonical Revision
+- `revisions:history` is a complete chain of `revises` from the Canonical
+  Revision to the Genesis Revision
 
 ### Example Revisions Top-Level Meta
 
