@@ -43,7 +43,7 @@ Authors must use capitals for each defined term to provide clarity to readers.
 | ---------- | ------------------------------------------------------------------- |
 | Resource   | A uniquely identifiable instance of a type                          |
 | Revision   | A complete representation of a Resource (attributes, relationships) |
-| Locked     | Immutable, no change nor is permitted                               |
+| Locked     | Immutable, no change or delete is permitted                         |
 | Canonical  | The current representation of a Resource                            |
 | Collection | An array of zero or more Resources of a type                        |
 | Fetch      | Make a request and read the response                                |
